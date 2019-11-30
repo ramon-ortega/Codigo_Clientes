@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 import sys
 
-clients = 'pablo,ricardo,'
-
+clients = ['pablo','ricardo']
 
 def create_client(client_name):
     """ Aqui creamos al cliente"""
     global clients
 
+    print(client_name)
     if client_name not in clients:
-        clients += client_name
-        _add_comma()
+        clients.append(client_name)
     else:
         print('The name of client is repeated')
 
@@ -18,41 +17,38 @@ def create_client(client_name):
 def updated_client(client_name, updated_name):
     global clients
 
-    if client_name in clients:
-        clients = clients.replace(client_name , updated_name)
-    else:
-        _client_not_in_list()
+    for idx, client in enumerate(clients):
+        if client_name in clients:
+            clients[idx] = updated_name
+        else:
+            _client_not_in_list()
 
 
 def search_client(client_name):
     global clients
 
-    client_list = clients.split(',')
-    for client in client_list:
+    for client in clients:
         if client != client_name:
             continue
         else:
             return True
 
+
 def delete_client(client_name):
     global clients
 
-    if client_name in clients:
-        clients = clients.replace(client_name + ',', '')
-    else:
-        _client_not_in_list()
+    for idx, client in enumerate(clients):
+        if client_name in clients:
+           clients.remove(client_name)
+        else:
+            _client_not_in_list()
 
 
 def list_clients():
     global clients
 
-    print(clients)
-
-
-def _add_comma():
-    global clients
-
-    clients += ','
+    for idx, client in enumerate(clients):
+        print(idx+1,client)
 
 
 def _get_client():
