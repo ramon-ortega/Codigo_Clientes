@@ -1,26 +1,30 @@
 # -*- coding: utf-8 -*-
 import sys
+import csv
+import os
 
-clients = [
-    {
-        'name': 'name',
-        'company': 'company',
-        'email': 'email',
-        'position': 'position',
-    },
-    {
-        'name': 'Ramon',
-        'company': 'Wotbi',
-        'email': 'ramon@wotbi.com',
-        'position': 'Developtment',
-    },
-    {
-        'name': 'Julian',
-        'company': 'UAZ',
-        'email': 'julian@fisica.uaz.udu.mx',
-        'position': 'Investigator',
-    }
-]
+CLIENT_TABLE = '.clients.csv'
+CLIENT_SCHEMA = ['name', 'company', 'email', 'position']
+clients = []
+
+
+def _initialize_clients_from_storage():
+    with open(CLIENT_TABLE, mode='r') as f:
+        reader = csv.DictReader(f, fieldnames=CLIENT_SCHEMA)
+
+        for row in reader:
+            clients.append(row)
+
+
+def _save_clients_to_storage():
+    tmp_table_name = '{}.tmp'.format(CLIENT_TABLE)
+    with open(tmp_table_name, mode='w') as f:
+        writer = csv.DictWriter(f, fieldnames=CLIENT_SCHEMA)
+        writer.writerows(clients)
+
+        os.remove(CLIENT_TABLE)
+        os.rename(tmp_table_name, CLIENT_TABLE)
+
 
 def create_client(client):
     """ Aqui creamos al cliente"""
@@ -116,6 +120,7 @@ def _client_not_in_list():
      return print('The client is not in the list')
 
 if __name__ == '__main__':
+    _initialize_clients_from_storage()
     _print_welcome()
 
     command = input('What\'s is your choice? ')
@@ -124,7 +129,6 @@ if __name__ == '__main__':
     if command == 'C':
         client = _client_enter_data()
         create_client(client)
-        list_clients()
     elif command == 'L':
         list_clients()
     elif command == 'S':
@@ -142,10 +146,10 @@ if __name__ == '__main__':
         print('Enter the new customer data')
         updated_client = _client_enter_data()
         updated_client_function(client_id, updated_client)
-        list_clients()
     elif command == 'D':
         client_id = int(_get_client_field('id'))
         delete_client(client_id)
-        list_clients()
     else:
         print('invalid command ')
+
+    _save_clients_to_storage()
