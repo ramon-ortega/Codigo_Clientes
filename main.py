@@ -89,6 +89,19 @@ def _get_client():
 
     return client_name
 
+
+def _client_enter_data():
+    client = None
+
+    client = {
+           'name': _get_client_field('name'),
+           'company': _get_client_field('company'),
+           'email': _get_client_field('email'),
+           'position': _get_client_field('position'),
+}
+
+    return client
+
 def _print_welcome():
     print("WELCOME TO ZACARTE'S GALLERY")
     print('*' * 30)
@@ -109,12 +122,7 @@ if __name__ == '__main__':
     command = command.upper()
 
     if command == 'C':
-        client = {
-           'name': _get_client_field('name'),
-           'company': _get_client_field('company'),
-           'email': _get_client_field('email'),
-           'position': _get_client_field('position'),
-}
+        client = _client_enter_data()
         create_client(client)
         list_clients()
     elif command == 'L':
@@ -132,12 +140,7 @@ if __name__ == '__main__':
         client_id = int(_get_client_field('id'))
         print('*' * 30)
         print('Enter the new customer data')
-        updated_client = {
-           'name': _get_client_field('name'),
-           'company': _get_client_field('company'),
-           'email': _get_client_field('email'),
-           'position': _get_client_field('position'),
-}
+        updated_client = _client_enter_data()
         updated_client_function(client_id, updated_client)
         list_clients()
     elif command == 'D':
